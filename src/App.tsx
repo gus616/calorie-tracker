@@ -3,6 +3,7 @@ import CalorieForm from "./components/CalorieForm"
 import Header from "./components/Header"
 import { activityReducer, initialState } from "./reducers/activityReducer";
 import ActivityList from "./components/ActivityList";
+import CalorieTracker from "./components/CalorieTracker";
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
 
       <section className="bg-gray-800 py-10">
         <div className="max-w-4xl mx-auto">
-          
+          <CalorieTracker  activities={state.activities}/>
         </div>
       </section>
 
