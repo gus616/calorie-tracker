@@ -1,14 +1,16 @@
-import { useState } from "react"
-import {v4 as uuidv4} from 'uuid';
+import { useEffect, useState } from "react"
+import { v4 as uuidv4 } from 'uuid';
 import { categories } from "../data/categories"
 import { Activity } from "../types";
-import { ActivityActions } from "../reducers/activityReducer";
+import { ActivityActions, ActivityState } from "../reducers/activityReducer";
 
 type CalorieFormProps = {
     dispatch: React.Dispatch<ActivityActions>
+    state: ActivityState
 }
 
-const CalorieForm = ({ dispatch }: CalorieFormProps) => {
+const CalorieForm = ({ dispatch, state }: CalorieFormProps) => {
+
 
     const initialState: Activity = {
         id: uuidv4(),
@@ -17,6 +19,14 @@ const CalorieForm = ({ dispatch }: CalorieFormProps) => {
         calories: 0
     }
     const [activity, setActivity] = useState<Activity>(initialState);
+
+    useEffect(() => {
+        if (state.activeId) {
+            const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0];
+            setActivity(selectedActivity);
+        }
+    }, [state])
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
@@ -43,13 +53,14 @@ const CalorieForm = ({ dispatch }: CalorieFormProps) => {
             }
         });
 
-        setActivity({...initialState, 
+        setActivity({
+            ...initialState,
             id: uuidv4()
         })
     }
 
     return (
-        <section className="bg-lime-500 py-20 px-5">
+        <>
             <div className="max-w-4xl mx-auto">
                 <form className="space-y-5 bg-white shadow p-10 rounded-lg" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 gap-3">
@@ -93,7 +104,7 @@ const CalorieForm = ({ dispatch }: CalorieFormProps) => {
                     />
                 </form>
             </div>
-        </section>
+        </>
     )
 }
 
